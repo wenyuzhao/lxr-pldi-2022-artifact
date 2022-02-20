@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index 37ebf12..2a61d1b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -53,7 +53,7 @@ clean:
+ 	cd native/ptlsim; $(MAKE) $(MFLAGS) clean
+ 	cd native/valgrind; $(MAKE) $(MFLAGS) clean
+ 
+-probes.jar: probe/RustMMTkProbe.class probe/RustMMTk32Probe.class probe/OpenJDKProbe.class probe/HelloWorldNativeProbe.class probe/ScenarioProbe.class probe/StopJITProbe.class probe/ValgrindProbe.class probe/PTLsimProbe.class probe/JikesRVMPerfEventProbe.class probe/MMTkProbe.class probe/ThreadEventProbe.class probe/PowerProbe.class probe/PerfEventProbe.class probe/PerfEventReader.class probe/PerfEventLauncherProbe.class probe/ApplicationPerfEventProbe.class probe/HelloWorldProbe.class probe/Probe.class probe/ProbeMux.class probe/Dacapo2006Callback.class probe/DacapoBachCallback.class  probe/DacapoChopinCallback.class spec/harness/ProgramRunner.class spec/harness/RunProgram.class SpecApplication.class probe/ReplayProbe.class probe/CompilerSamplesProbe.class probe/PJBB2005Callback.class
++probes.jar: probe/RustMMTkProbe.class probe/OpenJDKProbe.class probe/HelloWorldNativeProbe.class probe/ScenarioProbe.class probe/StopJITProbe.class probe/ValgrindProbe.class probe/PTLsimProbe.class probe/JikesRVMPerfEventProbe.class probe/MMTkProbe.class probe/ThreadEventProbe.class probe/PowerProbe.class probe/PerfEventProbe.class probe/PerfEventReader.class probe/PerfEventLauncherProbe.class probe/ApplicationPerfEventProbe.class probe/HelloWorldProbe.class probe/Probe.class probe/ProbeMux.class probe/Dacapo2006Callback.class probe/DacapoBachCallback.class  probe/DacapoChopinCallback.class
+ 	zip -r probes.jar *.class spec/harness/*.class probe/*.class
+ 	zip -r probes.jar *.class probe/*.class
+ 

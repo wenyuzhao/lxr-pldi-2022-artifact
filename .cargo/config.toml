@@ -1,0 +1,5 @@
+# Override `mmtk-core` depencency with the local copy
+paths = ["./mmtk-core"]
+
+[net]
+git-fetch-with-cli = true
