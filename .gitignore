@@ -1,1 +1,3 @@
-dacapo-evaluation-git-*.zip
+.DS_Store
+/*.jar
+/dacapo-evaluation-git-*.z*
