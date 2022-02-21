@@ -9,7 +9,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get install -y wget curl python3 build-essential
 RUN apt-get install -y openjdk-11-jdk
 RUN apt-get install -y autoconf libx11-dev libxext-dev libxrender-dev libxrandr-dev libxtst-dev libxt-dev libcups2-dev libfontconfig1-dev libasound2-dev
-RUN apt-get install -y clang git zip libpfm4 libpfm4-dev gcc-multilib g++-multilib p7zip-full
+RUN apt-get install -y clang git zip libpfm4 libpfm4-dev gcc-multilib g++-multilib python3-pip
 # - rust
 RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
@@ -30,8 +30,8 @@ COPY ./.cargo/config.toml /root/.cargo/config.toml
 RUN echo "nightly-2021-11-20" > /root/mmtk-core/rust-toolchain
 RUN echo "nightly-2021-11-20" > /root/mmtk-openjdk/mmtk/rust-toolchain
 
-# Clone running-ng
-RUN git clone https://github.com/anupli/running-ng.git
+# Install running-ng
+RUN pip3 install running-ng
 
 # Copy and build probes
 COPY ./probes /root/probes

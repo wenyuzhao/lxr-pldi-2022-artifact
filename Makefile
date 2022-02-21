@@ -18,8 +18,11 @@ docker-push:
 docker-build: dacapo-evaluation-git-f480064.zip
 	docker build -t wenyuzhao/lxr .
 
-dacapo-evaluation-git-f480064.zip: dacapo-evaluation-git-f480064.zip.001 dacapo-evaluation-git-f480064.zip.002 dacapo-evaluation-git-f480064.zip.003 dacapo-evaluation-git-f480064.zip.004
+dacapo-evaluation-git-f480064.zip: dacapo-9.12-bach.jar dacapo-2006-10-MR2.jar dacapo-evaluation-git-29a657f.jar dacapo-evaluation-git-f480064.jar dacapo-evaluation-git-f480064.zip.001 dacapo-evaluation-git-f480064.zip.002 dacapo-evaluation-git-f480064.zip.003 dacapo-evaluation-git-f480064.zip.004
 	cat dacapo-evaluation-git-f480064.zip.* > dacapo-evaluation-git-f480064.zip
 
-# dacapo-evaluation-git-f480064-part.*:
-# 	wget
+dacapo-%.jar:
+	wget https://github.com/wenyuzhao/lxr-pldi-2022-artefact/releases/download/_/$@
+
+dacapo-evaluation-git-f480064.zip.%:
+	wget https://github.com/wenyuzhao/lxr-pldi-2022-artefact/releases/download/_/$@
