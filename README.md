@@ -42,7 +42,7 @@ Run a simple benchmark using LXR GC and check the output results. This will ensu
 Please cd to `/root` and run:
 
 ```console
-~# MMTK_PLAN=Immix /root/bench/builds/jdk-lxr/jdk/bin/java -XX:MetaspaceSize=1G -XX:-UseBiasedLocking -XX:-TieredCompilation -XX:+UnlockDiagnosticVMOptions -XX:-InlineObjectCopy -Djava.library.path=/root/probes -cp /root/probes:/root/probes/probes.jar:/usr/share/benchmarks/dacapo/dacapo-evaluation-git-29a657f.jar -XX:+UseThirdPartyHeap -Dprobes=RustMMTk -Xms100M -Xmx100M Harness -n 5 -c probe.DacapoChopinCallback fop
+# MMTK_PLAN=Immix /root/bench/builds/jdk-lxr/jdk/bin/java -XX:MetaspaceSize=1G -XX:-UseBiasedLocking -XX:-TieredCompilation -XX:+UnlockDiagnosticVMOptions -XX:-InlineObjectCopy -Djava.library.path=/root/probes -cp /root/probes:/root/probes/probes.jar:/usr/share/benchmarks/dacapo/dacapo-evaluation-git-29a657f.jar -XX:+UseThirdPartyHeap -Dprobes=RustMMTk -Xms100M -Xmx100M Harness -n 5 -c probe.DacapoChopinCallback fop
 ```
 
 You will see the following output:
@@ -51,7 +51,7 @@ You will see the following output:
   <summary>Output detail</summary>
 
 ```console
-~# MMTK_PLAN=Immix /root/bench/builds/jdk-lxr/jdk/bin/java -XX:MetaspaceSize=1G -XX:-UseBiasedLocking -XX:-TieredCompilation -XX:+UnlockDiagnosticVMOptions -XX:-InlineObjectCopy -Djava.library.path=/root/probes -cp /root/probes:/root/probes/probes.jar:/usr/share/benchmarks/dacapo/dacapo-evaluation-git-29a657f.jar -XX:+UseThirdPartyHeap -Dprobes=RustMMTk -Xms100M -Xmx100M Harness -n 5 -c probe.DacapoChopinCallback fop
+# MMTK_PLAN=Immix /root/bench/builds/jdk-lxr/jdk/bin/java -XX:MetaspaceSize=1G -XX:-UseBiasedLocking -XX:-TieredCompilation -XX:+UnlockDiagnosticVMOptions -XX:-InlineObjectCopy -Djava.library.path=/root/probes -cp /root/probes:/root/probes/probes.jar:/usr/share/benchmarks/dacapo/dacapo-evaluation-git-29a657f.jar -XX:+UseThirdPartyHeap -Dprobes=RustMMTk -Xms100M -Xmx100M Harness -n 5 -c probe.DacapoChopinCallback fop
 -------------------- Immix Args --------------------
  * barrier: "FieldLoggingBarrier"
  * barrier_measurement: false
@@ -118,8 +118,8 @@ The data table between `MMTk Statistics Totals` and `End MMTk Statistics` is the
 ## [Table 4] Latency evaluation
 
 ```console
-~# cd /root
-~# running runbms /root/bench/results /root/bench/latency.yml 8 4 -p latency -i 20
+# cd /root
+# running runbms /root/bench/results /root/bench/latency.yml 8 4 -p latency -i 20
 ```
 
 This will run the latency experiment and generate all required results.
@@ -135,8 +135,8 @@ Each log file contains the results for all the `20` invocation of a benchmark. F
 ## [Table 6] Throughput evaluation
 
 ```console
-~# cd /root
-~# running runbms /root/bench/results /root/bench/xput.yml 8 4 -p xput -i 20
+# cd /root
+# running runbms /root/bench/results /root/bench/xput.yml 8 4 -p xput -i 20
 ```
 
 This will run the throughput experiment and generate all required results.
