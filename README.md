@@ -1,8 +1,17 @@
-# [**Artifact**] #132 Low-Latency, High-Throughput Garbage Collection
+# [**PLDI'22 Artifact**] #132 Low-Latency, High-Throughput Garbage Collection
 
 We ship our artifact as a docker image, containing several pre-built different OpenJDK builds (with LXR GC) for evaluation.
 
 This documentation shows the steps to fetch the image, and reproduce results in the paper.
+
+## Table of Contents
+
+* [Prepare](#prepare)
+  * [Warnings for fully reproducable results](#warnings-for-fully-reproducable-results)
+* [Getting started](#getting-started)
+* [Table 4 - Latency evaluation](#table-4-latency-evaluation)
+* [Table 6 - Throughput evaluation](#table-6-throughput-evaluation)
+* [Figure 1 - Latency Curve](#figure-1-latency-curve)
 
 ## Prepare
 
@@ -13,9 +22,9 @@ This documentation shows the steps to fetch the image, and reproduce results in 
 * CPU: AMD 3900X (12/24 cores, 3.8 GHz, 64 MB LLC). Other recent multi-core CPUs may work as well, but can produce different results other than we have in the paper.
 * At least 70 GB of disk space
 
-(Not recommended) If you'd like to build the docker image yourself, please clone the repo https://github.com/wenyuzhao/lxr-pldi-2022-artefact and run `make docker-build` to build the image.
+(Not recommended) If you'd like to build the docker image yourself, please download the artifact or clone the repo https://github.com/wenyuzhao/lxr-pldi-2022-artifact, then run `make docker-build` to build the image.
 
-### Warning for fully reproducable results
+### Warnings for fully reproducable results
 
 #### Cassandra benchmark may not run
 
@@ -30,6 +39,16 @@ ZGC in openjdk 11 sets a minimium heap requirement which is larger than the heap
 #### Benchmark running time
 
 Please note that some benchmarks may take over a day to complete.
+
+For benchmarks triggered by our `running` command (see detailed instructions in the following sections), feel free to decrease the command argument `-i 20` to a lower value to reduce the experiment time, or increase it to further reduce noise.
+
+#### Noise and errors
+
+Running inside a docker container can bring virtualization overheads. Feel free to use a native host to run the experiment, as explained above.
+
+#### Evaluations not included in this artifact
+
+In this artifact we do not evaluate and report numbers on openjdk GCs, e.g. G1, Shenandoah and ZGC. These are not the key data and claims of this paper.
 
 ## Getting started
 
@@ -56,7 +75,7 @@ Please cd to `/root` and run:
 You will see the following output:
 
 <details>
-  <summary>Output detail</summary>
+  <summary><b>Output detail</b></summary>
 
 ```console
 # MMTK_PLAN=Immix /root/bench/builds/jdk-lxr/jdk/bin/java -XX:MetaspaceSize=1G -XX:-UseBiasedLocking -XX:-TieredCompilation -XX:+UnlockDiagnosticVMOptions -XX:-InlineObjectCopy -Djava.library.path=/root/probes -cp /root/probes:/root/probes/probes.jar:/usr/share/benchmarks/dacapo/dacapo-evaluation-git-29a657f.jar -XX:+UseThirdPartyHeap -Dprobes=RustMMTk -Xms100M -Xmx100M Harness -n 5 -c probe.DacapoChopinCallback fop
@@ -140,6 +159,8 @@ Results are stored at `/root/bench/results/`. You'll see a folder with the name 
 
 Each log file contains the results for all the `20` invocations of a benchmark. For each invocation, there is a line in the log file starting with `===== DaCapo metered tail latency:` that contains the tail latency results. Please collect the results across invocations and calculate the mean value.
 
+Note: LXR latency in Table 1 is also derived from this result.
+
 ## [Table 6] Throughput evaluation
 
 ```console
@@ -157,3 +178,17 @@ Results are stored at `/root/bench/results/`. You'll see a folder with the name 
 
 Each log file contains the results for all the `20` invocations of a benchmark. For each invocation, please extract the `time` column from the data table and calculate the mean value as the average running time for this benchmark.
 
+## [Figure 1] Latency curve
+
+Please producing the results of Table 4 first. We'll use the results of the table 4 evaluation for latency curve plotting.
+
+Run `ls /root/bench/results` and find the result data folder with the name starting with `latency-`.
+
+Say if we have the data folder name as `latency-41e9f1e1e2ea-2022-03-04-Fri-021548`, then please run:
+
+```console
+# cd /root
+# ./bench/latency-curve.py latency-41e9f1e1e2ea-2022-03-04-Fri-021548
+```
+
+This will generate four png files under `/root/` containing the latency curve graphs. File names should be `latency-lusearch.jpg`, `latency-cassandra.jpg`, `latency-h2.jpg` and `latency-tomcat.jpg`.

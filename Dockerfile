@@ -26,6 +26,7 @@ RUN cd /usr/share/benchmarks/dacapo/ && unzip dacapo-evaluation-git-29a657f.zip
 
 # Install running-ng
 RUN pip3 install running-ng
+RUN pip3 install hdrhistogram seaborn pandas matplotlib
 
 # Copy and build probes
 COPY ./probes /root/probes
