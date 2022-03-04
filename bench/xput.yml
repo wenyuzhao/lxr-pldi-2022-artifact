@@ -1,19 +1,25 @@
 benchmarks:
   dacapochopin-29a657f:
-  - cassandra
-  - lusearch
-  - fop
-  - eclipse
-  - h2o
   - avrora
   - batik
+  - biojava
+  - cassandra
+  - eclipse
+  - fop
+  - graphchi
+  - h2
+  - jython
+  - luindex
+  - lusearch
+  - pmd
+  - tomcat
 configs:
 - jdk|ix|common|tph|mmtk_perf|nr-1
 - jdk|g1|common|hs_perf
 - jdk|shenandoah|common|hs_perf
 - jdk|z|common|hs_perf
 heap_range: 6
-invocations: 10
+invocations: 20
 minheap_multiplier: 1.0
 modifiers:
   barrier:
@@ -185,81 +191,9 @@ modifiers:
     val: hotspot_gc-Z
 remote_host:
 runtimes:
-  adoptopenjdk-11:
-    home: /usr/lib/jvm/adoptopenjdk-11-hotspot-amd64
-    release: 11
-    type: OpenJDK
-  adoptopenjdk-12:
-    home: /usr/lib/jvm/adoptopenjdk-12-hotspot-amd64
-    release: 12
-    type: OpenJDK
-  adoptopenjdk-13:
-    home: /usr/lib/jvm/adoptopenjdk-13-hotspot-amd64
-    release: 13
-    type: OpenJDK
-  adoptopenjdk-14:
-    home: /usr/lib/jvm/adoptopenjdk-14-hotspot-amd64
-    release: 14
-    type: OpenJDK
-  adoptopenjdk-15:
-    home: /usr/lib/jvm/adoptopenjdk-15-hotspot-amd64
-    release: 15
-    type: OpenJDK
-  adoptopenjdk-16:
-    home: /usr/lib/jvm/adoptopenjdk-15-hotspot-amd64
-    release: 15
-    type: OpenJDK
-  adoptopenjdk-8:
-    home: /usr/lib/jvm/adoptopenjdk-8-hotspot-amd64
-    release: 8
-    type: OpenJDK
   jdk:
-    home: /root/bench/builds/jdk-lxr/jdk
+    home: /root/bench/builds/jdk-lxr-stw/jdk
     release: 11
-    type: OpenJDK
-  jdk-17:
-    home: /usr/lib/jvm/temurin-17-amd64
-    release: 17
-    type: OpenJDK
-  jdk-b32k:
-    home: /home/wenyuz/MMTk-Dev/evaluation/configs/lxr-modest-heap/jdk-b32k-36a30992/jdk
-    release: 11
-    type: OpenJDK
-  jdk-b32k-mixcmrc:
-    home: /home/wenyuz/MMTk-Dev/evaluation/configs/lxr-modest-heap/jdk-b32k-mixcmrc-36a30992/jdk
-    release: 11
-    type: OpenJDK
-  jdk-b32k-old:
-    home: /home/wenyuz/MMTk-Dev/evaluation/configs/lxr-modest-heap/jdk-b32k-old-36a30992/jdk
-    release: 11
-    type: OpenJDK
-  jdk-b32k-stw:
-    home: /home/wenyuz/MMTk-Dev/evaluation/configs/lxr-modest-heap/jdk-b32k-stw-36a30992/jdk
-    release: 11
-    type: OpenJDK
-  jdk-b64k:
-    home: /home/wenyuz/MMTk-Dev/evaluation/configs/lxr-modest-heap/jdk-b64k-36a30992/jdk
-    release: 11
-    type: OpenJDK
-  jdk-b64k-hole:
-    home: /home/wenyuz/MMTk-Dev/evaluation/configs/lxr-modest-heap/jdk-b64k-hole-36a30992/jdk
-    release: 11
-    type: OpenJDK
-  jdk-b64k-stw:
-    home: /home/wenyuz/MMTk-Dev/evaluation/configs/lxr-modest-heap/jdk-b64k-stw-36a30992/jdk
-    release: 11
-    type: OpenJDK
-  temurin-11:
-    home: /usr/lib/jvm/temurin-11-amd64
-    release: 11
-    type: OpenJDK
-  temurin-17:
-    home: /usr/lib/jvm/temurin-17-amd64
-    release: 17
-    type: OpenJDK
-  temurin-8:
-    home: /usr/lib/jvm/temurin-8-amd64
-    release: 8
     type: OpenJDK
 spread_factor: 1
 suites:
@@ -288,29 +222,6 @@ suites:
         sunflow: 17
         xalan: 8
     path: /usr/share/benchmarks/dacapo/dacapo-9.12-bach.jar
-    release: '9.12'
-    timeout: 120
-    timing_iteration: 3
-    type: DaCapo
-  dacapobach-mr1:
-    minheap: adoptopenjdk-15-G1
-    minheap_values:
-      adoptopenjdk-15-G1:
-        avrora: 5
-        fop: 39
-        jython: 32
-        luindex: 9
-        pmd: 41
-        sunflow: 17
-        xalan: 10
-    path: /usr/share/benchmarks/dacapo/dacapo-9.12-MR1-bach.jar
-    release: '9.12'
-    timeout: 120
-    timing_iteration: 3
-    type: DaCapo
-  dacapobach-mr1-java6:
-    minheap_values: {}
-    path: /usr/share/benchmarks/dacapo/dacapo-9.12-MR1-bach-java6.jar
     release: '9.12'
     timeout: 120
     timing_iteration: 3
@@ -459,56 +370,3 @@ suites:
     timeout: 600
     timing_iteration: 5
     type: DaCapo
-  dacapochopin-f480064:
-    callback: probe.DacapoChopinCallback
-    minheap: adoptopenjdk-15-G1
-    minheap_values:
-      adoptopenjdk-15-G1:
-        avrora: 7
-        batik: 253
-        biojava: 191
-        cassandra: 89
-        eclipse: 437
-        fop: 19
-        graphchi: 255
-        h2: 1154
-        h2o: 73
-        jme: 55
-        jython: 37
-        luindex: 42
-        lusearch: 23
-        pmd: 243
-        sunflow: 33
-        tomcat: 25
-        tradebeans: 169
-        tradesoap: 133
-        xalan: 9
-        zxing: 96
-      temurin-17-G1:
-        avrora: 7
-        batik: 189
-        biojava: 95
-        eclipse: 411
-        fop: 15
-        graphchi: 255
-        h2: 773
-        jme: 29
-        jython: 25
-        luindex: 42
-        lusearch: 21
-        pmd: 156
-        sunflow: 29
-        tomcat: 21
-        tradebeans: 131
-        tradesoap: 103
-        xalan: 8
-        zxing: 97
-    path: /usr/share/benchmarks/dacapo/dacapo-evaluation-git-f480064.jar
-    release: evaluation
-    timeout: 600
-    timing_iteration: 5
-    type: DaCapo
-  specjbb2015:
-    path: /usr/share/benchmarks/SPECjbb2015/specjbb2015.jar
-    release: '1.03'
-    type: SPECjbb2015

@@ -31,7 +31,7 @@ cargo build --features $features --release
 popd
 
 pushd /root/mmtk-openjdk/repos/openjdk
-sh configure --disable-warnings-as-errors --with-debug-level=release
+sh configure --disable-warnings-as-errors --with-debug-level=release --with-target-bits=64 --disable-zip-debug-info --with-jvm-features=shenandoahgc
 make CONF=linux-x86_64-normal-server-release THIRD_PARTY_HEAP=$PWD/../../openjdk GC_FEATURES=$features
 popd
 

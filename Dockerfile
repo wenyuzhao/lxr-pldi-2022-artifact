@@ -9,7 +9,8 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get install -y wget curl python3 build-essential
 RUN apt-get install -y openjdk-11-jdk
 RUN apt-get install -y autoconf libx11-dev libxext-dev libxrender-dev libxrandr-dev libxtst-dev libxt-dev libcups2-dev libfontconfig1-dev libasound2-dev
-RUN apt-get install -y clang git zip libpfm4 libpfm4-dev gcc-multilib g++-multilib python3-pip vim
+RUN apt-get install -y clang git zip libpfm4 libpfm4-dev gcc-multilib g++-multilib python3-pip
+RUN apt-get install -y vim
 # - rust
 RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
@@ -42,6 +43,7 @@ RUN echo "nightly-2021-11-20" > /root/mmtk-openjdk/mmtk/rust-toolchain
 
 # Build OpenJDK(LXR)
 COPY ./bench /root/bench
+RUN ~/bench/build.sh --features lxr_evac --copy ~/bench/builds/jdk-lxr-stw
 RUN ~/bench/build.sh --features lxr --copy ~/bench/builds/jdk-lxr
 
 # Copy Makefile
