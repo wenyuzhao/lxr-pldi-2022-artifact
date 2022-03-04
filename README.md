@@ -17,11 +17,17 @@ This documentation shows the steps to fetch the image, and reproduce results in 
 
 ### Warning for fully reproducable results
 
-Due to the restrictions of docker, some of the benchmarks can be killed by docker, due to a large amount of memory reservations.
+#### Cassandra benchmark may not run
 
-To generate parial results to some of the benchmarks, please follow the remaining instructions.
+Due to the restrictions of docker, cassandra or even other benchmarks can be killed by docker, due to a large amount of memory reservations.
 
-To fully reproduce the result, feel free to copy all the content under `/root` and `/usr/share/benchmarks` to a native ubuntu 18.04 host before running the benchmarks. Please note that the file locaitons should remain the same. Additional packages should be installed as well (please check Dockerfile). Run using a virtual machine can work as well, but the overhead of virtualization can affect the result.
+To fully reproduce all the result include cassandra, feel free to copy all the content under `/root` and `/usr/share/benchmarks` to a native ubuntu 18.04 host before running the benchmarks. Please note that the file locaitons should remain the same. Additional packages should be installed as well (please check Dockerfile). Run using a virtual machine can work as well, but the overhead of virtualization can affect the result.
+
+#### Some benchmarks may not run with ZGC
+
+ZGC in openjdk 11 sets a minimium heap requirement which is larger than the heap size of some of the benchmarks. FOr these benchmarks we will not report ZGC results.
+
+#### Benchmark running time
 
 Please note that some benchmarks may take over a day to complete.
 
@@ -35,9 +41,11 @@ $ sudo docker run -dit --privileged -m 64g --name lxr wenyuzhao/lxr # Launch con
 $ sudo docker exec -it lxr /bin/bash # Login into the container
 ```
 
+We've already included the LXR and LXR (non-concurrent variant) into our image. They're located at `/root/bench/builds/jdk-lxr` and `/root/bench/builds/jdk-lxr-stw`.
+
 ### 2. Run simple benchmark
 
-Run a simple benchmark using LXR GC and check the output results. This will ensure that the builds in the image is functional.
+Run a simple benchmark using our pre-built LXR GC and check the output results. This will ensure that the builds in the image is functional.
 
 Please cd to `/root` and run:
 
@@ -130,7 +138,7 @@ Each benchmarks will be run 20 times to produce relatively stable results. Feel 
 
 Results are stored at `/root/bench/results/`. You'll see a folder with the name starting with `latency-`.
 
-Each log file contains the results for all the `20` invocation of a benchmark. For each invocation, there is a line in the log file starting with `===== DaCapo metered tail latency:` that contains the tail latency results. Please collect the results across invocations and calculate the mean value.
+Each log file contains the results for all the `20` invocations of a benchmark. For each invocation, there is a line in the log file starting with `===== DaCapo metered tail latency:` that contains the tail latency results. Please collect the results across invocations and calculate the mean value.
 
 ## [Table 6] Throughput evaluation
 
@@ -147,5 +155,5 @@ Each benchmarks will be run 20 times to produce relatively stable results. Feel 
 
 Results are stored at `/root/bench/results/`. You'll see a folder with the name starting with `xput-`.
 
-Each log file contains the results for all the `20` invocation of a benchmark. For each invocation, please extract the `time` column from the data table and calculate the mean value as the average running time for this benchmark.
+Each log file contains the results for all the `20` invocations of a benchmark. For each invocation, please extract the `time` column from the data table and calculate the mean value as the average running time for this benchmark.
 
