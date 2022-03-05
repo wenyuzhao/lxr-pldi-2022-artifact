@@ -3,7 +3,7 @@ benchmarks:
   - avrora
   - batik
   - biojava
-  - cassandra
+  # - cassandra
   - eclipse
   - fop
   - graphchi

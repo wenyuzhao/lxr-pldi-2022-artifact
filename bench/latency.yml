@@ -1,7 +1,7 @@
 benchmarks:
   dacapochopin-29a657f:
   - lusearch
-  - cassandra
+  # - cassandra
   - tomcat
   - h2
 configs:

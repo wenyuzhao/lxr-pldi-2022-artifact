@@ -66,7 +66,7 @@ def load_data_and_plot(bench, gcs, folders_list: List[List[str]], invocations = 
     # fig.suptitle(f'{bench} {latency_type} latency')
     sns.color_palette()
     colors = ['green', 'blue', 'orange', 'red'][:len(gcs)]
-    print(f'{gcs} {colors}')
+    # print(f'{gcs} {colors}')
     sns.lineplot(data=percentile_df, x="other", y="value", hue="GC")
     # sns.lineplot(data=percentile_df, x="other", y="value", hue="GC")
     ax.set_xscale('log')
@@ -105,7 +105,7 @@ load_data_and_plot(
     invocations = INVOCATIONS,
     save = './latency-lusearch.jpg',
 )
-
+'''
 load_data_and_plot(
     bench = 'cassandra',
     gcs = ["LXR", "G1", "Shen.", "ZGC"],
@@ -130,7 +130,7 @@ load_data_and_plot(
     invocations = INVOCATIONS,
     save = './latency-cassandra.jpg',
 )
-
+'''
 load_data_and_plot(
     bench = 'h2',
     gcs = ["LXR", "G1", "Shen.",  "ZGC"],
