@@ -58,7 +58,9 @@ Running inside a docker container can bring some overheads as well. Feel free to
 
 #### Evaluations not included in this artifact
 
-In our paper we have a few experiments and analysis on openjdk GCs. These results are not the claims of the paper, so we do not evaluate and reproduce them in this artifact.
+In our paper we have a few experiments and analysis on openjdk GCs and the benchmarks. These results are not the claims of the paper, so we do not evaluate and reproduce them in this artifact.
+
+Some statistics results on LXR GC it self, such as the rate of ref-count increments and SATB in Table 6 are also excluded in this artifact. They are not part of the claim of the paper as well.
 
 ## Getting started
 
