@@ -25,6 +25,13 @@ This documentation shows the steps to fetch the image, and reproduce results in 
 
 (Not recommended) If you'd like to build the docker image yourself, please download the artifact or clone the repo https://github.com/wenyuzhao/lxr-pldi-2022-artifact, then run `make docker-build` to build the image.
 
+### Source code
+
+Source code is available at:
+* https://github.com/wenyuzhao/mmtk-core/tree/lxr-2021-11-19 (commit 36a3099)
+* https://github.com/wenyuzhao/mmtk-openjdk/tree/lxr-2021-11-19 (commit 8c34bd4)
+* https://github.com/mmtk/openjdk/tree/6dc618e281128b6a38d40c7d8d2e345d610f0160
+
 ### Warnings for fully reproducable results
 
 #### Cassandra benchmark may not run
