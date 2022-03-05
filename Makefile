@@ -33,7 +33,7 @@ dacapo-evaluation-git-29a657f.zip: dacapo-9.12-bach.jar dacapo-2006-10-MR2.jar d
 	cat dacapo-evaluation-git-29a657f.zip.* > dacapo-evaluation-git-29a657f.zip
 
 dacapo-%.jar:
-	wget https://github.com/wenyuzhao/lxr-pldi-2022-artefact/releases/download/_/$@
+	wget https://github.com/wenyuzhao/lxr-pldi-2022-artifact/releases/download/_/$@
 
 dacapo-evaluation-git-29a657f.zip.%:
-	wget https://github.com/wenyuzhao/lxr-pldi-2022-artefact/releases/download/_/$@
+	wget https://github.com/wenyuzhao/lxr-pldi-2022-artifact/releases/download/_/$@
