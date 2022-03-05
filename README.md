@@ -12,6 +12,7 @@ This documentation shows the steps to fetch the image, and reproduce results in 
 * [Table 4 - Latency evaluation](#table-4-latency-evaluation)
 * [Table 6 - Throughput evaluation](#table-6-throughput-evaluation)
 * [Figure 1 - Latency Curve](#figure-1-latency-curve)
+* [Reusable artifact](#reusable-artifact)
 
 ## Prepare
 
@@ -20,7 +21,7 @@ This documentation shows the steps to fetch the image, and reproduce results in 
 * OS: Ubuntu 18.04 with docker installed (docker on windows or macos may not work).
 * Memory: At least 16GB. We use 64GB DDR4 2133MHz for our evaluaiton in the paper.
 * CPU: AMD 3900X (12/24 cores, 3.8 GHz, 64 MB LLC). Other recent multi-core CPUs may work as well, but can produce different results other than we have in the paper.
-* At least 70 GB of disk space
+* At least 70 GB of disk space. (The docker image itself is 40~50 GB.)
 
 (Not recommended) If you'd like to build the docker image yourself, please download the artifact or clone the repo https://github.com/wenyuzhao/lxr-pldi-2022-artifact, then run `make docker-build` to build the image.
 
@@ -28,9 +29,11 @@ This documentation shows the steps to fetch the image, and reproduce results in 
 
 #### Cassandra benchmark may not run
 
-Due to the restrictions of docker, cassandra or even other benchmarks can be killed by docker, due to a large amount of memory reservations.
+Due to the restrictions of docker, cassandra or even other benchmarks can be killed by docker, due to a large amount of memory reservations. _For this reason, we excluded cassandra from the evaluations._
 
 To fully reproduce all the result include cassandra, feel free to copy all the content under `/root` and `/usr/share/benchmarks` to a native ubuntu 18.04 host before running the benchmarks. Please note that the file locaitons should remain the same. Additional packages should be installed as well (please check Dockerfile). Run using a virtual machine can work as well, but the overhead of virtualization can affect the result.
+
+If you'd like to bring back cassandra, or exclude other benchmarks that have this issue as well, please edit the `benchmarks.dacapochopin-29a657f` field at the start of the two benchmark config files: `/root/bench/xput.yml` and `/root/bench/latency.yml`.
 
 #### Some benchmarks may not run with ZGC
 
@@ -191,4 +194,21 @@ Say if we have the data folder name as `latency-41e9f1e1e2ea-2022-03-04-Fri-0215
 # ./bench/latency-curve.py latency-41e9f1e1e2ea-2022-03-04-Fri-021548
 ```
 
-This will generate four png files under `/root/` containing the latency curve graphs. File names should be `latency-lusearch.jpg`, `latency-cassandra.jpg`, `latency-h2.jpg` and `latency-tomcat.jpg`.
+This will generate three png files under `/root/` containing the latency curve graphs. File names should be `latency-lusearch.jpg`, `latency-h2.jpg` and `latency-tomcat.jpg`.
+
+Note that cassandra is excluded from the evaluation, due to the docker issues.
+
+## Reusable artifact
+
+To demonstrate the reusability of the artifact, we'll provide steps to modify the parameters in LXR GC source code to produce a new LXR GC with new configuration.
+
+The default LXR configuration enables lazy concurrent ref-count decrement processing to minimize pause time. Here, we will disable this feature and make ref-count decrement processing happen in GC pauses. This will produce a new LXR that (hopefully) has relatively better throughput but worse tail latency.
+
+Steps:
+
+1. Open `/root/mmtk-core/Cargo.toml` (We've installed `vim` in the image. Feel free to use other editors)
+2. At line 107, change `lxr = ["lxr_basic", "lxr_cm", "lxr_lazy", "lxr_evac"]` to `lxr = ["lxr_basic", "lxr_cm", "lxr_evac"]`.
+3. Build the new LXR by running `~/bench/build.sh --features lxr`
+4. Run a simple benchmark: `MMTK_PLAN=Immix /root/mmtk-openjdk/repos/openjdk/build/linux-x86_64-normal-server-release/jdk/bin/java -XX:MetaspaceSize=1G -XX:-UseBiasedLocking -XX:-TieredCompilation -XX:+UnlockDiagnosticVMOptions -XX:-InlineObjectCopy -Djava.library.path=/root/probes -cp /root/probes:/root/probes/probes.jar:/usr/share/benchmarks/dacapo/dacapo-evaluation-git-29a657f.jar -XX:+UseThirdPartyHeap -Dprobes=RustMMTk -Xms100M -Xmx100M Harness -n 5 -c probe.DacapoChopinCallback fop`
+   * Note that the built jdk is at `/root/mmtk-openjdk/repos/openjdk/build/linux-x86_64-normal-server-release`.
+5. You'll see similar output as the getting started section. Except, in the `-------------------- Immix Args --------------------` section at the very begining of the output, you'll see ` * lxr_lazy_decrements: false` instead of ` * lxr_lazy_decrements: true`.
