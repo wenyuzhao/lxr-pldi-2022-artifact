@@ -29,29 +29,29 @@ This documentation shows the steps to fetch the image, and reproduce results in 
 
 #### Cassandra benchmark may not run
 
-Due to the restrictions of docker, cassandra or even other benchmarks can be killed by docker, due to a large amount of memory reservations. _For this reason, we excluded cassandra from the evaluations._
+Due to the restrictions of docker, cassandra or even other benchmarks can be sliently killed by docker because of a large amount of memory reservations. _For this reason, we excluded cassandra from the evaluations._
 
-To fully reproduce all the result include cassandra, feel free to copy all the content under `/root` and `/usr/share/benchmarks` to a native ubuntu 18.04 host before running the benchmarks. Please note that the file locaitons should remain the same. Additional packages should be installed as well (please check Dockerfile). Run using a virtual machine can work as well, but the overhead of virtualization can affect the result.
+To fully reproduce all the results with minimal experiment error, feel free to copy all the content under `/root` and `/usr/share/benchmarks` to a native ubuntu 18.04 host before running the benchmarks. Please note that the file locaitons should remain the same. Additional packages should be installed as well (please check Dockerfile). Run using a virtual machine can work as well, but the overhead of virtualization can affect the result.
 
-If you'd like to bring back cassandra, or exclude other benchmarks that have this issue as well, please edit the `benchmarks.dacapochopin-29a657f` field at the start of the two benchmark config files: `/root/bench/xput.yml` and `/root/bench/latency.yml`.
+If you'd like to bring back cassandra, or exclude other benchmarks that are also killed by docker, please edit the `benchmarks.dacapochopin-29a657f` field at the start of the two benchmark config files (`/root/bench/xput.yml` and `/root/bench/latency.yml`).
 
 #### Some benchmarks may not run with ZGC
 
-ZGC in openjdk 11 sets a minimium heap requirement which is larger than the heap size of some of the benchmarks. FOr these benchmarks we will not report ZGC results.
+ZGC in openjdk 11 sets a minimium heap requirement which is larger than the heap size of some of the benchmarks. For these benchmarks we will not report ZGC results.
 
 #### Benchmark running time
 
 Please note that some benchmarks may take over a day to complete.
 
-For benchmarks triggered by our `running` command (see detailed instructions in the following sections), feel free to decrease the command argument `-i 20` to a lower value to reduce the experiment time, or increase it to further reduce noise.
+For benchmarks triggered by our `running` command (see detailed instructions in the following sections), feel free to decrease the command argument `-i 20` to a smaller value to reduce the experiment time, or increase it to further reduce noise.
 
 #### Noise and errors
 
-Running inside a docker container can bring virtualization overheads. Feel free to use a native host to run the experiment, as explained above.
+Running inside a docker container can bring some overheads as well. Feel free to use a native host to run the experiment, as explained above.
 
 #### Evaluations not included in this artifact
 
-In this artifact we do not evaluate and report numbers on openjdk GCs, e.g. G1, Shenandoah and ZGC. These are not the key data and claims of this paper.
+In our paper we have a few experiments and analysis on openjdk GCs. These results are not the claims of the paper, so we do not evaluate and reproduce them in this artifact.
 
 ## Getting started
 
@@ -68,6 +68,8 @@ We've already included the LXR and LXR (non-concurrent variant) into our image. 
 ### 2. Run simple benchmark
 
 Run a simple benchmark using our pre-built LXR GC and check the output results. This will ensure that the builds in the image is functional.
+
+Note that our GC implementation is not as stable as OpenJDK GCs. If you run into an error, try re-run it a few more times.
 
 Please cd to `/root` and run:
 
@@ -154,11 +156,11 @@ The data table between `MMTk Statistics Totals` and `End MMTk Statistics` is the
 
 This will run the latency experiment and generate all required results.
 
-Each benchmarks will be run 20 times to produce relatively stable results. Feel free to decrease `-i 20` to a lower value to shorten the experiment time, or increase it to further reduce noise.
+Each benchmarks will be run 20 times to produce relatively stable results. Feel free to decrease `-i 20` to a smaller value to shorten the experiment time, or increase it to reduce noise.
 
 ### Check results
 
-Results are stored at `/root/bench/results/`. You'll see a folder with the name starting with `latency-`.
+Results are stored at `/root/bench/results/`. You'll see a folder with the name starting with `latency-` (should looks like `latency-41e9f1e1e2ea-2022-03-04-Fri-021548`).
 
 Each log file contains the results for all the `20` invocations of a benchmark. For each invocation, there is a line in the log file starting with `===== DaCapo metered tail latency:` that contains the tail latency results. Please collect the results across invocations and calculate the mean value.
 
@@ -183,7 +185,7 @@ Each log file contains the results for all the `20` invocations of a benchmark. 
 
 ## [Figure 1] Latency curve
 
-Please producing the results of Table 4 first. We'll use the results of the table 4 evaluation for latency curve plotting.
+Please [produce the results of Table 4](#table-4-latency-evaluation) first. We'll use the results of the table 4 evaluation for latency curve plotting.
 
 Run `ls /root/bench/results` and find the result data folder with the name starting with `latency-`.
 
@@ -211,4 +213,4 @@ Steps:
 3. Build the new LXR by running `~/bench/build.sh --features lxr`
 4. Run a simple benchmark: `MMTK_PLAN=Immix /root/mmtk-openjdk/repos/openjdk/build/linux-x86_64-normal-server-release/jdk/bin/java -XX:MetaspaceSize=1G -XX:-UseBiasedLocking -XX:-TieredCompilation -XX:+UnlockDiagnosticVMOptions -XX:-InlineObjectCopy -Djava.library.path=/root/probes -cp /root/probes:/root/probes/probes.jar:/usr/share/benchmarks/dacapo/dacapo-evaluation-git-29a657f.jar -XX:+UseThirdPartyHeap -Dprobes=RustMMTk -Xms100M -Xmx100M Harness -n 5 -c probe.DacapoChopinCallback fop`
    * Note that the built jdk is at `/root/mmtk-openjdk/repos/openjdk/build/linux-x86_64-normal-server-release`.
-5. You'll see similar output as the getting started section. Except, in the `-------------------- Immix Args --------------------` section at the very begining of the output, you'll see ` * lxr_lazy_decrements: false` instead of ` * lxr_lazy_decrements: true`.
+5. You'll see similar output as the [getting started section](#2-run-simple-benchmark). Except, in the `-------------------- Immix Args --------------------` section at the very begining of the output, you'll see ` * lxr_lazy_decrements: false` instead of ` * lxr_lazy_decrements: true`.
