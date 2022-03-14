@@ -68,7 +68,7 @@ Some statistics results on LXR GC it self, such as the rate of ref-count increme
 
 ```console
 $ sudo docker pull wenyuzhao/lxr # Pull docker image
-$ sudo docker run -dit --privileged -m 64g --name lxr wenyuzhao/lxr # Launch container
+$ sudo docker run -dit --privileged -m 16g --name lxr wenyuzhao/lxr # Launch container
 $ sudo docker exec -it lxr /bin/bash # Login into the container
 ```
 
