@@ -18,15 +18,14 @@ curl https://sh.rustup.rs -sSf | bash -s -- -y
 export PATH="/root/.cargo/bin:$PATH"
 
 # Install running-ng
-RUN pip3 install running-ng
-RUN pip3 install hdrhistogram seaborn pandas matplotlib
+pip3 install running-ng
+pip3 install hdrhistogram seaborn pandas matplotlib
 
 # Fetch DaCapo Benchmark Suite
 mkdir -p /usr/share/benchmarks/dacapo/
 pushd /usr/share/benchmarks/dacapo/
 wget $download_url/dacapo-9.12-bach.jar
 wget $download_url/dacapo-2006-10-MR2.jar
-wget $download_url/dacapo-evaluation-git-29a657f.jar
 wget $download_url/dacapo-evaluation-git-29a657f.jar
 wget $download_url/dacapo-evaluation-git-29a657f.zip.aa
 wget $download_url/dacapo-evaluation-git-29a657f.zip.ab
@@ -67,9 +66,9 @@ wget $bench_download_url/build.sh
 wget $bench_download_url/latency-curve.py
 wget $bench_download_url/latency.yml
 wget $bench_download_url/xput.yml
+chmod +x build.sh
 popd
 wget https://raw.githubusercontent.com/wenyuzhao/lxr-pldi-2022-artifact/main/Makefile
 
 # Build OpenJDK(LXR)
-~/bench/build.sh --features lxr_evac --copy ~/bench/builds/jdk-lxr-stw
 ~/bench/build.sh --features lxr --copy ~/bench/builds/jdk-lxr
