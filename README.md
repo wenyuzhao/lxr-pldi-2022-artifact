@@ -72,7 +72,7 @@ $ sudo docker run -dit --privileged -m 16g --name lxr wenyuzhao/lxr # Launch con
 $ sudo docker exec -it lxr /bin/bash # Login into the container
 ```
 
-We've already included the LXR and LXR (non-concurrent variant) into our image. They're located at `/root/bench/builds/jdk-lxr` and `/root/bench/builds/jdk-lxr-stw`.
+We've already included the LXR build into our image, located at `/root/bench/builds/jdk-lxr`.
 
 ### 2. Run simple benchmark
 

@@ -23,7 +23,7 @@ docker-build: dacapo-evaluation-git-29a657f.zip
 
 docker-run:
 	sudo docker rm -f lxr
-	sudo docker run -dit --privileged -m 64g --name lxr $(docker_image_name)
+	sudo docker run -dit --privileged -m 16g --name lxr $(docker_image_name)
 	# sudo docker exec -it lxr /bin/bash
 
 docker-stop:

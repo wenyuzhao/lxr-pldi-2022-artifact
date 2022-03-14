@@ -192,7 +192,7 @@ modifiers:
 remote_host:
 runtimes:
   jdk:
-    home: /root/bench/builds/jdk-lxr-stw/jdk
+    home: /root/bench/builds/jdk-lxr/jdk
     release: 11
     type: OpenJDK
 spread_factor: 1
