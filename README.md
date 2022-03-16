@@ -38,7 +38,7 @@ Source code is available at:
 
 Due to the restrictions of docker, cassandra or even other benchmarks can be sliently killed by docker because of a large amount of memory reservations. _For this reason, we excluded cassandra from the evaluations._
 
-To fully reproduce all the results with minimal experiment error, feel free to our provided VirtualBox image (`LXR.ova`) or use `setup-vm.sh` to setup a native host.
+To fully reproduce all the results with minimal experiment error, feel free to our provided VirtualBox image (`LXR.ova`) or use `setup-vm.sh` to setup a native host.  Please import the `.voa` image to VirtualBox or any other compatible VMs.
 
 If you'd like to bring back cassandra, or exclude other benchmarks that are also killed by docker, please edit the `benchmarks.dacapochopin-29a657f` field at the start of the two benchmark config files (`/root/bench/xput.yml` and `/root/bench/latency.yml`).
 
