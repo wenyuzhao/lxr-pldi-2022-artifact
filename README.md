@@ -71,7 +71,9 @@ Although we recommend to use our docker image, we also provide a VirtualBox `.ov
 
 Please download the image (`LXR.ova`) and import it to VirtualBox or other compatible virtual machines.
 
-**Note: When importing, please change the number of cores to 24, and the memory to at least 16GB. Also please ignore the missing shared folder (`/home/wenyu`) warning.**
+**Note: When importing, please change the number of cores to 24, and ensure the memory is at least 16GB.**
+
+*Also please note that some benbchmarks (especially canssandra) may still can be killed due to out of memory. Increasing the VM memory may partially ease the problem.**
 
 ## Getting started
 
