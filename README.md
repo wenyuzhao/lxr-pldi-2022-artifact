@@ -8,6 +8,7 @@ This documentation shows the steps to fetch the image, and reproduce results in 
 
 * [Prepare](#prepare)
   * [Warnings for fully reproducable results](#warnings-for-fully-reproducable-results)
+  * [(Optional) Import and setup the VirtualBox image](#optional-import-and-setup-the-virtualbox-image)
 * [Getting started](#getting-started)
 * [Table 4 - Latency evaluation](#table-4-latency-evaluation)
 * [Table 6 - Throughput evaluation](#table-6-throughput-evaluation)
@@ -32,7 +33,7 @@ Source code is available at:
 * https://github.com/wenyuzhao/mmtk-openjdk/tree/lxr-2021-11-19 (commit 8c34bd4)
 * https://github.com/mmtk/openjdk/tree/6dc618e281128b6a38d40c7d8d2e345d610f0160
 
-**DOI**: The source code is also available at https://doi.org/10.5281/zenodo.6351356.
+**DOI**: The source code (as well as a VirtualBox image containing all the benchmarks we're using) is also available at https://doi.org/10.5281/zenodo.6351356.
 
 ### Warnings for fully reproducable results
 
@@ -40,7 +41,7 @@ Source code is available at:
 
 Due to the restrictions of docker, cassandra or even other benchmarks can be sliently killed by docker because of a large amount of memory reservations. _For this reason, we excluded cassandra from the evaluations._
 
-To fully reproduce all the results with minimal experiment error, feel free to our provided VirtualBox image (`LXR.ova`) or use `setup-vm.sh` to setup a native host.  Please import the `.voa` image to VirtualBox or any other compatible VMs.
+To fully reproduce all the results with minimal experiment error, feel free to our provided VirtualBox image (`LXR.ova`) or use `setup-vm.sh` to setup a native host.  Please checkout [the following section](#optional-import-and-setup-the-virtualbox-image) for detailed VirtualBox setup instructions.
 
 If you'd like to bring back cassandra, or exclude other benchmarks that are also killed by docker, please edit the `benchmarks.dacapochopin-29a657f` field at the start of the two benchmark config files (`/root/bench/xput.yml` and `/root/bench/latency.yml`).
 
@@ -63,6 +64,14 @@ Running inside a docker container can bring some overheads as well. Feel free to
 In our paper we have a few experiments and analysis on openjdk GCs and the benchmarks. These results are not the claims of the paper, so we do not evaluate and reproduce them in this artifact.
 
 Some statistics results on LXR GC it self, such as the rate of ref-count increments and SATB in Table 6 are also excluded in this artifact. They are not part of the claim of the paper as well.
+
+### (Optional) Import and setup the VirtualBox image
+
+Although we recommend to use our docker image, we also provide a VirtualBox `.ova` image containing all the benchmarks and source code to reproduce the results.
+
+Please download the image (`LXR.ova`) and import it to VirtualBox or other compatible virtual machines.
+
+**Note: When importing, please change the number of cores to 24, and the memory to at least 16GB. Also please ignore the missing shared folder (`/home/wenyu`) warning.**
 
 ## Getting started
 
