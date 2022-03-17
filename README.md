@@ -75,6 +75,8 @@ Please download the image (`LXR.ova`) and import it to VirtualBox or other compa
 
 *Also please note that some benbchmarks (especially canssandra) may still can be killed due to out of memory. Increasing the VM memory may partially ease the problem.**
 
+*If you see a missing shared folder warning during importing, please ignore it.*
+
 ## Getting started
 
 ### 1. Pull docker image, launch and enter container
