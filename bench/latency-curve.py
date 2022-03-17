@@ -90,7 +90,7 @@ load_data_and_plot(
     folders_list = [
         # LXR
         [
-            result(RUNID, 'lusearch.3023.70.jdk.ix.common.tph.mmtk_perf.nr-1.latency.dacapochopin-29a657f'),
+            result(RUNID, 'lusearch.3023.70.jdk.ix.common.tph.nr-1.latency.dacapochopin-29a657f'),
         ],
         # G1
         [
@@ -112,7 +112,7 @@ load_data_and_plot(
     folders_list = [
         # LXR
         [
-            result(RUNID, 'cassandra.3023.269.jdk.ix.common.tph.mmtk_perf.nr-1.latency.dacapochopin-29a657f'),
+            result(RUNID, 'cassandra.3023.269.jdk.ix.common.tph.nr-1.latency.dacapochopin-29a657f'),
         ],
         # G1
         [
@@ -137,7 +137,7 @@ load_data_and_plot(
     folders_list = [
         # LXR
         [
-            result(RUNID, 'h2.3023.3489.jdk.ix.common.tph.mmtk_perf.nr-1.latency.dacapochopin-29a657f'),
+            result(RUNID, 'h2.3023.3489.jdk.ix.common.tph.nr-1.latency.dacapochopin-29a657f'),
         ],
         # G1
         [
@@ -163,7 +163,7 @@ load_data_and_plot(
     folders_list = [
         # LXR
         [
-            result(RUNID, 'tomcat.3023.76.jdk.ix.common.tph.mmtk_perf.nr-1.latency.dacapochopin-29a657f'),
+            result(RUNID, 'tomcat.3023.76.jdk.ix.common.tph.nr-1.latency.dacapochopin-29a657f'),
         ],
         # G1
         [

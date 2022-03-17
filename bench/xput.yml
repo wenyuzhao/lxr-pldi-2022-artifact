@@ -14,7 +14,7 @@ benchmarks:
   - pmd
   - tomcat
 configs:
-- jdk|ix|common|tph|mmtk_perf|nr-1
+- jdk|ix|common|tph|nr-1
 - jdk|g1|common|hs_perf
 - jdk|shenandoah|common|hs_perf
 - jdk|z|common|hs_perf
@@ -72,7 +72,7 @@ modifiers:
     val: -XX:-UseCompressedOops -XX:+UnlockExperimentalVMOptions -XX:+Use{0}GC
   hs_perf:
     type: ModifierSet
-    val: jvmti|jvmti_env|perf
+    val: jvmti|jvmti_env
   hugetlb:
     type: JVMArg
     val: -XX:+UseTransparentHugePages
@@ -192,7 +192,7 @@ modifiers:
 remote_host:
 runtimes:
   jdk:
-    home: /root/bench/builds/jdk-lxr-stw/jdk
+    home: /root/bench/builds/jdk-lxr/jdk
     release: 11
     type: OpenJDK
 spread_factor: 1

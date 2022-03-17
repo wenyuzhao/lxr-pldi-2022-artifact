@@ -5,7 +5,7 @@ benchmarks:
   - tomcat
   - h2
 configs:
-- jdk|ix|common|tph|mmtk_perf|nr-1|latency
+- jdk|ix|common|tph|nr-1|latency
 - jdk|g1|common|hs_perf|latency
 - jdk|shenandoah|common|hs_perf|latency
 - jdk|z|common|hs_perf|latency
@@ -63,7 +63,7 @@ modifiers:
     val: -XX:-UseCompressedOops -XX:+UnlockExperimentalVMOptions -XX:+Use{0}GC
   hs_perf:
     type: ModifierSet
-    val: jvmti|jvmti_env|perf
+    val: jvmti|jvmti_env
   hugetlb:
     type: JVMArg
     val: -XX:+UseTransparentHugePages

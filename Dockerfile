@@ -44,7 +44,6 @@ RUN echo "nightly-2021-11-20" > /root/mmtk-openjdk/mmtk/rust-toolchain
 
 # Build OpenJDK(LXR)
 COPY ./bench /root/bench
-RUN ~/bench/build.sh --features lxr_evac --copy ~/bench/builds/jdk-lxr-stw
 RUN ~/bench/build.sh --features lxr --copy ~/bench/builds/jdk-lxr
 
 # Copy Makefile
