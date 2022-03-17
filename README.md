@@ -32,7 +32,7 @@ Source code is available at:
 * https://github.com/wenyuzhao/mmtk-openjdk/tree/lxr-2021-11-19 (commit 8c34bd4)
 * https://github.com/mmtk/openjdk/tree/6dc618e281128b6a38d40c7d8d2e345d610f0160
 
-**DOI**: The source code is also available at https://doi.org/10.5281/zenodo.6330177.
+**DOI**: The source code is also available at https://doi.org/10.5281/zenodo.6351356.
 
 ### Warnings for fully reproducable results
 
