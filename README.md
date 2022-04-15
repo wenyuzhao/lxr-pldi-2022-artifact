@@ -1,57 +1,56 @@
-# [**PLDI'22 Artifact**] #132 Low-Latency, High-Throughput Garbage Collection
+# [**PLDI'22 Artifact**] Low-Latency, High-Throughput Garbage Collection
 
-We ship our artifact as a docker image, containing several pre-built different OpenJDK builds (with LXR GC) for evaluation.
+We ship our artifact as a docker image, containing the pre-built OpenJDK builds (with LXR GC) and all necessary benchmarks for evaluation.
 
-This documentation shows the steps to fetch the image, and reproduce results in the paper.
+This documentation shows the steps to fetch the image, and reproduce all the key results in the paper.
 
 ## Table of Contents
 
 * [Prepare](#prepare)
-  * [Warnings for fully reproducable results](#warnings-for-fully-reproducable-results)
-  * [(Optional) Import and setup the VirtualBox image](#optional-import-and-setup-the-virtualbox-image)
+  * [Platform requirements](#platform-requirements)
+  * [Source code](#source-code)
+  * [Warnings for fully reproducible results](#warnings-for-fully-reproducible-results)
 * [Getting started](#getting-started)
 * [Table 4 - Latency evaluation](#table-4-latency-evaluation)
 * [Table 6 - Throughput evaluation](#table-6-throughput-evaluation)
-* [Figure 1 - Latency Curve](#figure-1-latency-curve)
-* [Reusable artifact](#reusable-artifact)
+* [Figure 5 - Latency Curve](#figure-1-latency-curve)
+* [Build the docker image](#build-the-docker-image)
 
 ## Prepare
 
 ### Platform requirements
 
-* OS: Ubuntu 18.04 with docker installed (docker on windows or macos may not work).
-* Memory: At least 16GB. We use 64GB DDR4 2133MHz for our evaluaiton in the paper.
-* CPU: AMD 3900X (12/24 cores, 3.8 GHz, 64 MB LLC). Other recent multi-core CPUs may work as well, but can produce different results other than we have in the paper.
-* At least 70 GB of disk space. (The docker image itself is 40~50 GB.)
+Here we list the machine details we used for our experiments in the paper.
 
-(Not recommended) If you'd like to build the docker image yourself, please download the artifact or clone the repo https://github.com/wenyuzhao/lxr-pldi-2022-artifact, then run `make docker-build` to build the image.
+* OS: Ubuntu 18.04 (optionally, with docker installed).
+* Memory: At least 16GB. We use 64GB DDR4 3200MHz for our evaluation in the paper.
+* CPU: AMD Zen 3 5950X (16/32 cores, 3.4 GHz, 64 MB LLC).
+* At least 70 GB of disk space. We use an NVMe SSD.
+
+Please make your machine as close to the configuration avobe as possible. Otherwise, you will likely to get a different result. For more details please refer to the sensitivity or treats to validity sections in our paper.
 
 ### Source code
 
 Source code is available at:
-* https://github.com/wenyuzhao/mmtk-core/tree/lxr-2021-11-19 (commit 36a3099)
-* https://github.com/wenyuzhao/mmtk-openjdk/tree/lxr-2021-11-19 (commit 8c34bd4)
-* https://github.com/mmtk/openjdk/tree/6dc618e281128b6a38d40c7d8d2e345d610f0160
+* https://github.com/wenyuzhao/mmtk-core/tree/lxr-pldi-2022 (commit 4d4e516)
+* https://github.com/wenyuzhao/mmtk-openjdk/tree/lxr-pldi-2022 (commit abbdd1db)
+* https://github.com/mmtk/openjdk/commit/f817e9d00b2850221bb9443443a123e38e81a129
 
-**DOI**: The source code (as well as a VirtualBox image containing all the benchmarks we're using) is also available at https://doi.org/10.5281/zenodo.6351356.
-
-### Warnings for fully reproducable results
+### Warnings for fully reproducible results
 
 #### Cassandra benchmark may not run
 
-Due to the restrictions of docker, cassandra or even other benchmarks can be sliently killed by docker because of a large amount of memory reservations. _For this reason, we excluded cassandra from the evaluations._
+Due to the restrictions of docker, cassandra or even other benchmarks can be sliently killed by docker because of a large amount of memory reservations.
 
-To fully reproduce all the results with minimal experiment error, feel free to our provided VirtualBox image (`LXR.ova`) or use `setup-vm.sh` to setup a native host.  Please checkout [the following section](#optional-import-and-setup-the-virtualbox-image) for detailed VirtualBox setup instructions.
-
-If you'd like to bring back cassandra, or exclude other benchmarks that are also killed by docker, please edit the `benchmarks.dacapochopin-29a657f` field at the start of the two benchmark config files (`/root/bench/xput.yml` and `/root/bench/latency.yml`).
+To fully reproduce all the results with minimal experiment error, feel free to run the experiment on a native host. You can easily do that by copying out all the folders under `/root` to the host machine's `/root` directory.  You may also need to run `pip3 install running-ng` on your native machine to install the benchmark running tool.
 
 #### Some benchmarks may not run with ZGC
 
-ZGC in openjdk 11 sets a minimium heap requirement which is larger than the heap size of some of the benchmarks. For these benchmarks we will not report ZGC results.
+As discussed in our paper, ZGC in openjdk 11 sets a minimium heap requirement that is larger than the heap size of some of the benchmarks. For these benchmarks we will not report ZGC results.
 
 #### Benchmark running time
 
-Please note that some benchmarks may take over a day to complete.
+Please note that benchmarks may take over a day to complete.
 
 For benchmarks triggered by our `running` command (see detailed instructions in the following sections), feel free to decrease the command argument `-i 20` to a smaller value to reduce the experiment time, or increase it to further reduce noise.
 
@@ -61,21 +60,7 @@ Running inside a docker container can bring some overheads as well. Feel free to
 
 #### Evaluations not included in this artifact
 
-In our paper we have a few experiments and analysis on openjdk GCs and the benchmarks. These results are not the claims of the paper, so we do not evaluate and reproduce them in this artifact.
-
-Some statistics results on LXR GC it self, such as the rate of ref-count increments and SATB in Table 6 are also excluded in this artifact. They are not part of the claim of the paper as well.
-
-### (Optional) Import and setup the VirtualBox image
-
-Although we recommend to use our docker image, we also provide a VirtualBox `.ova` image containing all the benchmarks and source code to reproduce the results.
-
-Please download the image (`LXR.ova`) and import it to VirtualBox or other compatible virtual machines.
-
-**Note: When importing, please change the number of cores to 24, and ensure the memory is at least 16GB.**
-
-*Also please note that some benbchmarks (especially canssandra) may still can be killed due to out of memory. Increasing the VM memory may partially ease the problem.**
-
-*If you see a missing shared folder warning during importing, please ignore it.*
+In our paper we have a few experiments and analysis on openjdk GCs, LXR itself, as well as the benchmark characteristics. These results are not the _key_ claims of the paper, so we do not evaluate and reproduce them in this artifact.
 
 ## Getting started
 
@@ -91,14 +76,14 @@ We've already included the LXR build into our image, located at `/root/bench/bui
 
 ### 2. Run simple benchmark
 
-Run a simple benchmark using our pre-built LXR GC and check the output results. This will ensure that the builds in the image is functional.
+Run a simple benchmark using our pre-built LXR GC and check the output results. This will ensure that the builds in the image are functional.
 
 Note that our GC implementation is not as stable as OpenJDK GCs. If you run into an error, try re-run it a few more times.
 
 Please cd to `/root` and run:
 
 ```console
-# MMTK_PLAN=Immix /root/bench/builds/jdk-lxr/jdk/bin/java -XX:MetaspaceSize=1G -XX:-UseBiasedLocking -XX:-TieredCompilation -XX:+UnlockDiagnosticVMOptions -XX:-InlineObjectCopy -Djava.library.path=/root/probes -cp /root/probes:/root/probes/probes.jar:/usr/share/benchmarks/dacapo/dacapo-evaluation-git-29a657f.jar -XX:+UseThirdPartyHeap -Dprobes=RustMMTk -Xms100M -Xmx100M Harness -n 5 -c probe.DacapoChopinCallback fop
+# MMTK_PLAN=Immix TRACE_THRESHOLD2=10 LOCK_FREE_BLOCKS=32 MAX_SURVIVAL_MB=256 SURVIVAL_PREDICTOR_WEIGHTED=1 /root/bench/builds/jdk-lxr/jdk/bin/java -XX:MetaspaceSize=1G -XX:-UseBiasedLocking -XX:-TieredCompilation -XX:+UnlockDiagnosticVMOptions -XX:-InlineObjectCopy -Djava.library.path=/root/probes -cp /root/probes:/root/probes/probes.jar:/root/dacapo/dacapo-evaluation-git-b00bfa9.jar -XX:+UseThirdPartyHeap -Dprobes=RustMMTk -Xms100M -Xmx100M Harness -n 5 -c probe.DacapoChopinCallback lusearch
 ```
 
 You will see the following output:
@@ -107,7 +92,7 @@ You will see the following output:
   <summary><b>Output detail</b></summary>
 
 ```console
-# MMTK_PLAN=Immix /root/bench/builds/jdk-lxr/jdk/bin/java -XX:MetaspaceSize=1G -XX:-UseBiasedLocking -XX:-TieredCompilation -XX:+UnlockDiagnosticVMOptions -XX:-InlineObjectCopy -Djava.library.path=/root/probes -cp /root/probes:/root/probes/probes.jar:/usr/share/benchmarks/dacapo/dacapo-evaluation-git-29a657f.jar -XX:+UseThirdPartyHeap -Dprobes=RustMMTk -Xms100M -Xmx100M Harness -n 5 -c probe.DacapoChopinCallback fop
+# MMTK_PLAN=Immix TRACE_THRESHOLD2=10 LOCK_FREE_BLOCKS=32 MAX_SURVIVAL_MB=256 SURVIVAL_PREDICTOR_WEIGHTED=1 /root/bench/builds/jdk-lxr/jdk/bin/java -XX:MetaspaceSize=1G -XX:-UseBiasedLocking -XX:-TieredCompilation -XX:+UnlockDiagnosticVMOptions -XX:-InlineObjectCopy -Djava.library.path=/root/probes -cp /root/probes:/root/probes/probes.jar:/root/dacapo/dacapo-evaluation-git-b00bfa9.jar -XX:+UseThirdPartyHeap -Dprobes=RustMMTk -Xms100M -Xmx100M Harness -n 5 -c probe.DacapoChopinCallback lusearch
 -------------------- Immix Args --------------------
  * barrier: "FieldLoggingBarrier"
  * barrier_measurement: false
@@ -122,9 +107,10 @@ You will see the following output:
  * lxr_mature_evacuation: true
  * lxr_evacuate_nursery_in_recycled_lines: false
  * lxr_delayed_nursery_evacuation: false
+ * lxr_enable_initial_alloc_limit: false
  * disable_mutator_line_reusing: false
- * lock_free_blocks: 96
- * nursery_blocks: Some(3072)
+ * lock_free_blocks: 32
+ * nursery_blocks: None
  * nursery_ratio: None
  * low_concurrent_worker_priority: false
  * concurrent_worker_ratio: 50
@@ -132,13 +118,26 @@ You will see the following output:
  * ignore_reusing_blocks: true
  * log_block_size: 15
  * log_line_size: 8
- * enable_non_temporal_memset: true
- * max_mature_defrag_blocks: 128
- * max_mature_defrag_mb: 4
+ * enable_non_temporal_memset: false
+ * max_mature_defrag_percent: 15
  * no_gc_until_lazy_sweeping_finished: false
  * log_bytes_per_rc_lock_bit: 9
- * heap_health_guided_gc: false
+ * heap_health_guided_gc: true
  * count_bytes_for_mature_evac: true
+ * opportunistic_evac: false
+ * opportunistic_evac_threshold: 50
+ * incs_limit: None
+ * lxr_rc_only: false
+ * lxr_trace_threshold: 20.0
+ * max_survival_mb: Some(256)
+ * survival_predictor_harmonic_mean: false
+ * survival_predictor_weighted: true
+ * trace_threshold2: Some(10)
+ * max_copy_size: 2048
+ * buffer_size: 1024
+ * nontemporal: false
+ * cm_large_array_optimization: true
+ * lazy_mu_reuse_block_sweeping: true
 ----------------------------------------------------
 --------------------------------------------------------------------------------
 IMPORTANT NOTICE:  This is NOT a release build of the DaCapo suite.
@@ -151,31 +150,52 @@ Please use our github page to create an issue or a pull request.
     https://github.com/dacapobench/dacapobench.
 --------------------------------------------------------------------------------
 
-===== DaCapo evaluation-git-29a657f fop starting warmup 1 =====
-===== DaCapo evaluation-git-29a657f fop completed warmup 1 in 5099 msec =====
-===== DaCapo evaluation-git-29a657f fop starting warmup 2 =====
-===== DaCapo evaluation-git-29a657f fop completed warmup 2 in 1907 msec =====
-===== DaCapo evaluation-git-29a657f fop starting warmup 3 =====
-===== DaCapo evaluation-git-29a657f fop completed warmup 3 in 1413 msec =====
-===== DaCapo evaluation-git-29a657f fop starting warmup 4 =====
-===== DaCapo evaluation-git-29a657f fop completed warmup 4 in 1144 msec =====
-===== DaCapo evaluation-git-29a657f fop starting =====
+Using scaled threading model. 8 processors detected, 8 threads used to drive the workload, in a possible range of [1,2048]
+===== DaCapo evaluation-git-b00bfa9 lusearch starting warmup 1 =====
+Completing query batches: 100%
+===== DaCapo evaluation-git-b00bfa9 lusearch completed warmup 1 in 18305 msec =====
+===== DaCapo simple tail latency: 50% 69 usec, 90% 445 usec, 99% 1572 usec, 99.9% 8900 usec, 99.99% 16401 usec, max 47697 usec, measured over 524288 events =====
+===== DaCapo metered tail latency: 50% 995422 usec, 90% 1820552 usec, 99% 1906210 usec, 99.9% 1916172 usec, 99.99% 1921226 usec, max 1931143 usec, measured over 524288 events =====
+===== DaCapo evaluation-git-b00bfa9 lusearch starting warmup 2 =====
+Completing query batches: 100%
+===== DaCapo evaluation-git-b00bfa9 lusearch completed warmup 2 in 17459 msec =====
+===== DaCapo simple tail latency: 50% 67 usec, 90% 458 usec, 99% 1261 usec, 99.9% 6873 usec, 99.99% 13459 usec, max 45045 usec, measured over 524288 events =====
+===== DaCapo metered tail latency: 50% 68 usec, 90% 480 usec, 99% 4168 usec, 99.9% 11242 usec, 99.99% 14346 usec, max 45045 usec, measured over 524288 events =====
+===== DaCapo evaluation-git-b00bfa9 lusearch starting warmup 3 =====
+Completing query batches: 100%
+===== DaCapo evaluation-git-b00bfa9 lusearch completed warmup 3 in 18550 msec =====
+===== DaCapo simple tail latency: 50% 72 usec, 90% 489 usec, 99% 1405 usec, 99.9% 7508 usec, 99.99% 14094 usec, max 34682 usec, measured over 524288 events =====
+===== DaCapo metered tail latency: 50% 109 usec, 90% 16949 usec, 99% 55472 usec, 99.9% 64885 usec, 99.99% 67246 usec, max 72483 usec, measured over 524288 events =====
+===== DaCapo evaluation-git-b00bfa9 lusearch starting warmup 4 =====
+Completing query batches: 100%
+===== DaCapo evaluation-git-b00bfa9 lusearch completed warmup 4 in 17384 msec =====
+===== DaCapo simple tail latency: 50% 68 usec, 90% 464 usec, 99% 1328 usec, 99.9% 6963 usec, 99.99% 13346 usec, max 33206 usec, measured over 524288 events =====
+===== DaCapo metered tail latency: 50% 126 usec, 90% 34378 usec, 99% 62011 usec, 99.9% 68218 usec, 99.99% 70939 usec, max 74394 usec, measured over 524288 events =====
+===== DaCapo evaluation-git-b00bfa9 lusearch starting =====
+Completing query batches: 100%
 ============================ MMTk Statistics Totals ============================
-pauses  time.other      time.stw        work.RCSweepMatureLOS.time.total        work.RCReleaseUnallocatedNurseryBlocks.count    work.RCReleaseMatureLOS.time.max        work.Release.time.min work.ScanJNIHandlesRoots.count  work.ScanUniverseRoots.time.max work.Prepare.time.max   work.ScanManagementRoots.time.max       work.FlushMatureEvacRemsets.count     work.ScanStackRoot.count        work.ScanStringTableRoots.count work.RCReleaseUnallocatedNurseryBlocks.time.total       work.PrepareChunk.time.max      work.ScanStackRoot.time.max   work.ScheduleCollection.time.min        work.ProcessIncs.time.total     work.ScanJNIHandlesRoots.time.min       work.Release.time.total total-work.time.totalwork.RCReleaseMatureLOS.time.min work.RCReleaseUnallocatedNurseryBlocks.time.min work.ScanManagementRoots.count  work.ProcessIncs.time.min       work.ProcessModBufSATB.time.total     work.ScanAOTLoaderRoots.count   work.EvacuateMatureObjects.count        work.ScanUniverseRoots.count    work.ScanCodeCacheRoots.time.max        work.ScanSystemDictionaryRoots.time.total     work.ScanSystemDictionaryRoots.time.max work.ScanUniverseRoots.time.min work.ScanWeakProcessorRoots.time.max    work.RCSweepNurseryBlocks.count work.Release.count    total-work.count        work.ScanAOTLoaderRoots.time.max        work.RCSweepMatureLOS.time.max  work.ScanJvmtiExportRoots.count work.StopMutators.time.min   work.SweepDeadCyclesChunk.time.max       work.EndOfGC.count      work.RCImmixCollectRootEdges.count      work.SelectDefragBlocksInChunk.count    work.RCSweepMatureLOS.time.minwork.ScanStringTableRoots.time.max      work.ScanVMThreadRoots.time.total       work.LXRStopTheWorldProcessEdges.time.total     work.RCImmixCollectRootEdges.time.max   work.ScanJNIHandlesRoots.time.total   work.ScanStringTableRoots.time.min      work.ScheduleCollection.time.total      work.Prepare.count      work.ImmixConcurrentTraceObjects.time.min     work.ScanWeakProcessorRoots.time.min    work.PrepareChunk.time.total    work.RCSweepNurseryBlocks.time.max      work.SweepBlocksAfterDecs.count work.MatureSweeping.time.max  work.ScanVMThreadRoots.count    total-work.time.min     work.ScanSystemDictionaryRoots.count    work.ScanObjectSynchronizerRoots.time.total     work.ScheduleCollection.count work.ProcessModBufSATB.count    work.SelectDefragBlocksInChunk.time.total       work.RCSweepNurseryBlocks.time.total    work.RCReleaseUnallocatedNurseryBlocks.time.max       work.ScanJvmtiExportRoots.time.total    work.MatureSweeping.count       work.LXRStopTheWorldProcessEdges.time.min       work.ScanJNIHandlesRoots.time.max       work.StopMutators.time.total  work.ImmixConcurrentTraceObjects.time.max       work.ScheduleCollection.time.max        work.StopMutators.time.max      work.ScanClassLoaderDataGraphRoots.count      work.ProcessIncs.count  work.FlushMatureEvacRemsets.time.min    work.EndOfGC.time.min   work.ImmixConcurrentTraceObjects.count  work.ScanObjectSynchronizerRoots.time.min     work.ScanStackRoot.time.total   work.LXRStopTheWorldProcessEdges.count  work.LXRStopTheWorldProcessEdges.time.max       work.ScanObjectSynchronizerRoots.time.max     work.ScanAOTLoaderRoots.time.min        work.FlushMatureEvacRemsets.time.max    work.ImmixConcurrentTraceObjects.time.total     work.ScanSystemDictionaryRoots.time.min       work.FlushMatureEvacRemsets.time.total  work.ScanClassLoaderDataGraphRoots.time.total   work.EndOfGC.time.total work.EvacuateMatureObjects.time.max     total-work.time.max   work.ProcessDecs.time.min       work.ScanClassLoaderDataGraphRoots.time.min     work.ScanJvmtiExportRoots.time.max      work.ProcessModBufSATB.time.max work.SweepDeadCyclesChunk.time.total  work.SelectDefragBlocksInChunk.time.max work.SweepBlocksAfterDecs.time.total    work.Prepare.time.total work.ScanVMThreadRoots.time.min work.ScanCodeCacheRoots.time.min      work.MatureSweeping.time.total  work.RCImmixCollectRootEdges.time.min   work.SweepBlocksAfterDecs.time.max      work.ScanVMThreadRoots.time.max work.MatureSweeping.time.min  work.ScanStackRoot.time.min     work.RCSweepMatureLOS.count     work.SweepDeadCyclesChunk.time.min      work.ProcessModBufSATB.time.min work.ProcessDecs.time.total   work.ScanClassLoaderDataGraphRoots.time.max     work.ScanUniverseRoots.time.total       work.SweepBlocksAfterDecs.time.min      work.ScanCodeCacheRoots.time.total    work.ScanObjectSynchronizerRoots.count  work.SelectDefragBlocksInChunk.time.min work.Release.time.max   work.ScanStringTableRoots.time.total    work.Prepare.time.minwork.RCReleaseMatureLOS.time.total       work.ScanManagementRoots.time.total     work.ScanAOTLoaderRoots.time.total      work.ProcessDecs.count  work.RCSweepNurseryBlocks.time.min    work.PrepareChunk.time.min      work.EvacuateMatureObjects.time.total   work.RCImmixCollectRootEdges.time.total work.ScanWeakProcessorRoots.time.total  work.ScanWeakProcessorRoots.count     work.RCReleaseMatureLOS.count   work.PrepareChunk.count work.ProcessDecs.time.max       work.EndOfGC.time.max   work.ScanManagementRoots.time.min    work.EvacuateMatureObjects.time.min      work.ScanCodeCacheRoots.count   work.ProcessIncs.time.max       work.SweepDeadCyclesChunk.count work.ScanJvmtiExportRoots.time.min   work.StopMutators.count  gc.rc   gc.initial_satb gc.final_satb   gc.full gc.emergency
-16      1018.15 42.21   51669.00        16      17884.00        4709.00 16      164559.00       6653.00 97793.00        8       192     16      29423.00        26780.00     693763.00        3997.00 173494856.00    1522.00 276197.00       924417593.00    461.00  190.00  16      331.00  340983.00       16      1325    16      1041516.00      617639.00     177032.00       1954.00 132570.00       3072    16      41131   4429.00 11512.00        16      101320.00       793651.00       16      1440    184     1974.00 311245.00     168778.00       41975101.00     15159.00        198625.00       119014.00       205237.00       16      90.00   26640.00        2901773.00      32952.00        768  39484.00 16      80.00   16      61746.00        16      21      2275263.00      8641967.00      15429.00        48802.00        8       90.00   87204.00        3828259.00   623170.00        23093.00        361348.00       16      4475    11031.00        45846.00        23361   491.00  13346602.00     4832    203592.00       36659.00        401.0075662.00        574482591.00    6903.00 349318.00       2658772.00      3054738.00      137238.00       1041516.00      230.00  105618.00       9297.00 57909.00        39945941.00   77696.00        2053208.00      44575.00        1793.00 736774.00       255531.00       110.00  39935.00        105488.00       24957.00        1563.00 8       29606.00      982.00  5420324.00      235062.00       693896.00       80.00   13854750.00     16      2735.00 41858.00        3248102.00      1212.00 89298.00        166204.00    20661.00 765     80.00   3286.00 28128982.00     725207.00       762575.00       16      16      184     132800.00       221295.00       1393.00 571.00  16      807416.00    184      832.00  16      0       8       8       0       0
-Total time: 1060.36 ms
+pauses  time.other      time.stw        gc.rc   gc.initial_satb gc.final_satb   gc.full gc.emergency    cm_early_quit   gc_with_unfinished_lazy_jobs    time.yield      time.roots      time.satb       total_used_pages        min_used_pages     max_used_pages  incs_triggerd   alloc_triggerd  survival_triggerd       overflow_triggerd       rc_during_satb
+525     16232.78        1151.63 439     43      43      0       0       0       0       0       0       0       4428690 5808    10933   0       0       0       525     0
+Total time: 17384.40 ms
 ------------------------------ End MMTk Statistics -----------------------------
-===== DaCapo evaluation-git-29a657f fop PASSED in 1060 msec =====
+===== DaCapo evaluation-git-b00bfa9 lusearch PASSED in 17384 msec =====
+===== DaCapo simple tail latency: 50% 66 usec, 90% 454 usec, 99% 1375 usec, 99.9% 7203 usec, 99.99% 14140 usec, max 50680 usec, measured over 524288 events =====
+===== DaCapo metered tail latency: 50% 58359 usec, 90% 109886 usec, 99% 129627 usec, 99.9% 141334 usec, 99.99% 146067 usec, max 150553 usec, measured over 524288 events =====
 ```
 </details>
 
-The data table between `MMTk Statistics Totals` and `End MMTk Statistics` is the performance results we're interested in.
+The data table after `MMTk Statistics Totals` is the performance results we're interested in. Specifically, the "Total time:" in the table is the throughput of the benchmark. The _last_ "DaCapo metered tail latency" record is the tail latency of the benchmark.
+
+Note that the benchmark runs for 5 iterations. Iterations 1-4 are the warmup runs, and the 5-th iteration is the actual benchmark run. We always ignore the throughput or latency results reported from the warmup iterations, and only report the last iteration results.
+
+When doing evaluations, we usually run the above runs for at least 20 times (i.e. 20 _invocations_) to reduce the noise.
+
 
 ## [Table 4] Latency evaluation
 
 ```console
 # cd /root
-# running runbms /root/bench/results /root/bench/latency.yml 8 4 -p latency -i 20
+# running runbms /root/bench/results /root/bench/latency.yml 32 7 -p latency -i 20
 ```
 
 This will run the latency experiment and generate all required results.
@@ -194,7 +214,7 @@ Note: LXR latency in Table 1 is also derived from this result.
 
 ```console
 # cd /root
-# running runbms /root/bench/results /root/bench/xput.yml 8 4 -p xput -i 20
+# running runbms /root/bench/results /root/bench/throughput.yml 12 7 -p throughput -i 20
 ```
 
 This will run the throughput experiment and generate all required results.
@@ -203,11 +223,11 @@ Each benchmarks will be run 20 times to produce relatively stable results. Feel 
 
 ### Check results
 
-Results are stored at `/root/bench/results/`. You'll see a folder with the name starting with `xput-`.
+Results are stored at `/root/bench/results/`. You'll see a folder with the name starting with `throughput-`.
 
 Each log file contains the results for all the `20` invocations of a benchmark. For each invocation, please extract the `time` column from the data table and calculate the mean value as the average running time for this benchmark.
 
-## [Figure 1] Latency curve
+## [Figure 5] Latency curve
 
 Please [produce the results of Table 4](#table-4-latency-evaluation) first. We'll use the results of the table 4 evaluation for latency curve plotting.
 
@@ -224,17 +244,13 @@ This will generate three png files under `/root/` containing the latency curve g
 
 Note that cassandra is excluded from the evaluation, due to the docker issues.
 
-## Reusable artifact
+# Build the docker image
 
-To demonstrate the reusability of the artifact, we'll provide steps to modify the parameters in LXR GC source code to produce a new LXR GC with new configuration.
+Instead of using our pre-build image, you can also choose to build the docker image yourself.
 
-The default LXR configuration enables lazy concurrent ref-count decrement processing to minimize pause time. Here, we will disable this feature and make ref-count decrement processing happen in GC pauses. This will produce a new LXR that (hopefully) has relatively better throughput but worse tail latency.
 
-Steps:
-
-1. Open `/root/mmtk-core/Cargo.toml` (We've installed `vim` in the image. Feel free to use other editors)
-2. At line 107, change `lxr = ["lxr_basic", "lxr_cm", "lxr_lazy", "lxr_evac"]` to `lxr = ["lxr_basic", "lxr_cm", "lxr_evac"]`.
-3. Build the new LXR by running `~/bench/build.sh --features lxr`
-4. Run a simple benchmark: `MMTK_PLAN=Immix /root/mmtk-openjdk/repos/openjdk/build/linux-x86_64-normal-server-release/jdk/bin/java -XX:MetaspaceSize=1G -XX:-UseBiasedLocking -XX:-TieredCompilation -XX:+UnlockDiagnosticVMOptions -XX:-InlineObjectCopy -Djava.library.path=/root/probes -cp /root/probes:/root/probes/probes.jar:/usr/share/benchmarks/dacapo/dacapo-evaluation-git-29a657f.jar -XX:+UseThirdPartyHeap -Dprobes=RustMMTk -Xms100M -Xmx100M Harness -n 5 -c probe.DacapoChopinCallback fop`
-   * Note that the built jdk is at `/root/mmtk-openjdk/repos/openjdk/build/linux-x86_64-normal-server-release`.
-5. You'll see similar output as the [getting started section](#2-run-simple-benchmark). Except, in the `-------------------- Immix Args --------------------` section at the very begining of the output, you'll see ` * lxr_lazy_decrements: false` instead of ` * lxr_lazy_decrements: true`.
+```console
+$ git clone https://github.com/wenyuzhao/lxr-pldi-2022-artifact.git
+$ cd lxr-pldi-2022-artifact
+$ make docker-build # This will fetch all the required files before running `docker build`.
+```
