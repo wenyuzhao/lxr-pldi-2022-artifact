@@ -1,7 +1,7 @@
 
 docker_image_name=wenyuzhao/lxr
 common_jvm_args=-XX:MetaspaceSize=1G -XX:-UseBiasedLocking -XX:-TieredCompilation -XX:+UnlockDiagnosticVMOptions -XX:-InlineObjectCopy
-dacapo_jvm_args=-Djava.library.path=/root/probes -cp /root/probes:/root/probes/probes.jar:/usr/share/benchmarks/dacapo/dacapo-evaluation-git-29a657f.jar
+dacapo_jvm_args=-Djava.library.path=/root/probes -cp /root/probes:/root/probes/probes.jar:/usr/share/benchmarks/dacapo/dacapo-evaluation-git-b00bfa9.jar
 lxr_jvm_args=-XX:+UseThirdPartyHeap -Dprobes=RustMMTk
 
 build-default-lxr:
@@ -18,7 +18,7 @@ run2:
 docker-push:
 	sudo docker push $(docker_image_name)
 
-docker-build: dacapo-evaluation-git-29a657f.zip
+docker-build: # dacapo-evaluation-git-b00bfa9.zip
 	sudo docker build -t $(docker_image_name) .
 
 docker-run:
@@ -29,11 +29,11 @@ docker-run:
 docker-stop:
 	sudo docker stop lxr
 
-dacapo-evaluation-git-29a657f.zip: dacapo-9.12-bach.jar dacapo-2006-10-MR2.jar dacapo-evaluation-git-29a657f.jar dacapo-evaluation-git-29a657f.jar dacapo-evaluation-git-29a657f.zip.aa dacapo-evaluation-git-29a657f.zip.ab dacapo-evaluation-git-29a657f.zip.ac dacapo-evaluation-git-29a657f.zip.ad
-	cat dacapo-evaluation-git-29a657f.zip.* > dacapo-evaluation-git-29a657f.zip
+dacapo-evaluation-git-b00bfa9.zip: dacapo-9.12-bach.jar dacapo-2006-10-MR2.jar dacapo-evaluation-git-b00bfa9.jar dacapo-evaluation-git-b00bfa9.jar dacapo-evaluation-git-b00bfa9.zip.aa dacapo-evaluation-git-b00bfa9.zip.ab dacapo-evaluation-git-b00bfa9.zip.ac dacapo-evaluation-git-b00bfa9.zip.ad
+	cat dacapo-evaluation-git-b00bfa9.zip.* > dacapo-evaluation-git-b00bfa9.zip
 
 dacapo-%.jar:
 	wget https://github.com/wenyuzhao/lxr-pldi-2022-artifact/releases/download/_/$@
 
-dacapo-evaluation-git-29a657f.zip.%:
+dacapo-evaluation-git-b00bfa9.zip.%:
 	wget https://github.com/wenyuzhao/lxr-pldi-2022-artifact/releases/download/_/$@

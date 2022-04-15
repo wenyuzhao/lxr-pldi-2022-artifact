@@ -1,0 +1,144 @@
+benchmarks:
+  dacapochopin-b00bfa9:
+  - lusearch
+  - h2
+  - cassandra
+  - tomcat
+  - fop
+  - h2o
+  - avrora
+  - batik
+  - biojava
+  - eclipse
+  - graphchi
+  - jython
+  - luindex
+  - pmd
+  - sunflow
+  - xalan
+  - zxing
+configs:
+- jdk-lxr|g1|common|hs
+- jdk-lxr|ix|common|tph|trace2-5|srv-128|srvw|lfb-32
+- jdk-lxr|shenandoah|common|hs
+- jdk-lxr|z|common|hs
+heap_range: 3
+invocations: 20
+minheap_multiplier: 1.0
+modifiers:
+  c2:
+    excludes:
+      dacapochopin-b00bfa9:
+      - tradebeans
+      - tradesoap
+    type: JVMArg
+    val: -XX:-TieredCompilation -Xcomp
+  common:
+    type: ModifierSet
+    val: ms|s|c2|probes|probes_cp|no_inline_clone|no_weak_and_class_unload
+  g1:
+    type: ModifierSet
+    val: hotspot_gc-G1|no_weak_and_class_unload
+  hotspot_gc:
+    type: JVMArg
+    val: -XX:-UseCompressedOops -XX:+UnlockExperimentalVMOptions -XX:+Use{0}GC
+  hs:
+    type: ModifierSet
+    val: jvmti|jvmti_env
+  ix:
+    type: EnvVar
+    val: Immix
+    var: MMTK_PLAN
+  jvmti:
+    type: JVMArg
+    val: -agentpath:/root/probes/libperf_statistics.so
+  jvmti_env:
+    type: EnvVar
+    val: /root/probes/libperf_statistics.so
+    var: LD_PRELOAD
+  latency:
+    type: ProgramArg
+    val: --dump-latency
+  lfb:
+    type: EnvVar
+    val: '{0}'
+    var: LOCK_FREE_BLOCKS
+  ms:
+    type: JVMArg
+    val: -XX:MetaspaceSize=1G -XX:+DisableExplicitGC -XX:-UseBiasedLocking
+  no_inline_clone:
+    type: JVMArg
+    val: -XX:+UnlockDiagnosticVMOptions -XX:-InlineObjectCopy
+  no_weak_and_class_unload:
+    type: JVMArg
+    val: -XX:-ClassUnloading -XX:-ClassUnloadingWithConcurrentMark -XX:-RegisterReferences
+  probes:
+    type: JVMArg
+    val: -Djava.library.path=/root/probes -Dprobes=RustMMTk
+  probes_cp:
+    type: JVMClasspath
+    val: /root/probes /root/probes/probes.jar
+  s:
+    type: JVMArg
+    val: -server
+  shenandoah:
+    type: ModifierSet
+    val: hotspot_gc-Shenandoah|no_weak_and_class_unload
+  srv:
+    type: EnvVar
+    val: '{0}'
+    var: MAX_SURVIVAL_MB
+  srvw:
+    type: EnvVar
+    val: '1'
+    var: SURVIVAL_PREDICTOR_WEIGHTED
+  threads:
+    type: EnvVar
+    val: '{0}'
+    var: MMTK_THREADS
+  tph:
+    type: JVMArg
+    val: -XX:+UseThirdPartyHeap
+  trace2:
+    type: EnvVar
+    val: '{0}'
+    var: TRACE_THRESHOLD2
+  z:
+    type: ModifierSet
+    val: hotspot_gc-Z|no_weak_and_class_unload
+remote_host:
+runtimes:
+  jdk-lxr:
+    home: /root/bench/builds/jdk-lxr/jdk
+    release: 11
+    type: OpenJDK
+spread_factor: 1
+suites:
+  dacapochopin-b00bfa9:
+    callback: probe.DacapoChopinCallback
+    minheap: g1
+    minheap_values:
+      g1:
+        avrora: 7
+        batik: 1076
+        biojava: 191
+        cassandra: 263
+        eclipse: 534
+        fop: 73
+        graphchi: 255
+        h2: 1191
+        h2o: 3689
+        jme: 235
+        jython: 325
+        luindex: 41
+        lusearch: 53
+        pmd: 637
+        sunflow: 87
+        tomcat: 71
+        xalan: 43
+        zxing: 153
+    path: /root/dacapo/dacapo-evaluation-git-b00bfa9.jar
+    release: evaluation
+    timeout: 600
+    timing_iteration: 5
+    type: DaCapo
