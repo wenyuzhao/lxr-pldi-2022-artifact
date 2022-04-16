@@ -10,7 +10,7 @@ RUN apt-get install -y wget curl python3 build-essential
 RUN apt-get install -y openjdk-11-jdk
 RUN apt-get install -y autoconf libx11-dev libxext-dev libxrender-dev libxrandr-dev libxtst-dev libxt-dev libcups2-dev libfontconfig1-dev libasound2-dev
 RUN apt-get install -y clang git zip libpfm4 libpfm4-dev gcc-multilib g++-multilib python3-pip
-RUN apt-get install -y vim
+RUN apt-get install -y vim tmux
 
 # Install rust
 RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
