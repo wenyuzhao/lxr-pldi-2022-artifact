@@ -18,7 +18,7 @@ run2:
 docker-push:
 	sudo docker push $(docker_image_name)
 
-docker-build: # dacapo-evaluation-git-b00bfa9.zip
+docker-build: probes.zip dacapo-evaluation-git-b00bfa9.zip
 	sudo docker build -t $(docker_image_name) .
 
 docker-run:
@@ -29,6 +29,9 @@ docker-run:
 docker-stop:
 	sudo docker stop lxr
 
+probes.zip:
+	wget https://github.com/wenyuzhao/lxr-pldi-2022-artifact/releases/download/_/$@
+
 dacapo-evaluation-git-b00bfa9.zip: dacapo-9.12-bach.jar dacapo-2006-10-MR2.jar dacapo-evaluation-git-b00bfa9.jar dacapo-evaluation-git-b00bfa9.jar dacapo-evaluation-git-b00bfa9.zip.aa dacapo-evaluation-git-b00bfa9.zip.ab dacapo-evaluation-git-b00bfa9.zip.ac dacapo-evaluation-git-b00bfa9.zip.ad
 	cat dacapo-evaluation-git-b00bfa9.zip.* > dacapo-evaluation-git-b00bfa9.zip
 
@@ -37,3 +40,8 @@ dacapo-%.jar:
 
 dacapo-evaluation-git-b00bfa9.zip.%:
 	wget https://github.com/wenyuzhao/lxr-pldi-2022-artifact/releases/download/_/$@
+
+clean:
+	rm -r probes
+	rm *.jar
+	rm *.zip

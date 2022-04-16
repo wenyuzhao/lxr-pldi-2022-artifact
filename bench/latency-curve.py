@@ -43,7 +43,8 @@ LATENCY_SIGNIFICANT_DIGITS = 5
 LABEL_FONT_SIZE = 60
 LEGEND_FONT_SIZE = 60
 TICK_FONT_SIZE = 50
-SAVE_FILE = 'pdf'
+SAVE_FILE = 'jpg'
+# SAVE_FILE = 'pdf'
 
 
 def load_data(invocation: int, folder: str):

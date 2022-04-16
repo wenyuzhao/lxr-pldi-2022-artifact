@@ -27,7 +27,8 @@ COPY ./dacapo-evaluation-git-b00bfa9.zip  /root/dacapo/dacapo-evaluation-git-b00
 RUN cd /root/dacapo/dacapo-evaluation-git-b00bfa9 && unzip dacapo-evaluation-git-b00bfa9.zip
 
 # Copy and build probes
-COPY ./probes /root/probes
+COPY ./probes.zip /root/
+RUN cd /root && unzip probes.zip
 RUN cd probes && make all JDK=/usr/lib/jvm/java-11-openjdk-amd64 CFLAGS=-Wno-error=stringop-overflow JAVAC=/usr/lib/jvm/java-11-openjdk-amd64/bin/javac
 
 # Clone mmtk-core, mmtk-openjdk and openjdk
