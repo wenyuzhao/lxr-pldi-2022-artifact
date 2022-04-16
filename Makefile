@@ -32,7 +32,7 @@ docker-stop:
 probes.zip:
 	wget https://github.com/wenyuzhao/lxr-pldi-2022-artifact/releases/download/_/$@
 
-dacapo-evaluation-git-b00bfa9.zip: dacapo-9.12-bach.jar dacapo-2006-10-MR2.jar dacapo-evaluation-git-b00bfa9.jar dacapo-evaluation-git-b00bfa9.jar dacapo-evaluation-git-b00bfa9.zip.aa dacapo-evaluation-git-b00bfa9.zip.ab dacapo-evaluation-git-b00bfa9.zip.ac dacapo-evaluation-git-b00bfa9.zip.ad
+dacapo-evaluation-git-b00bfa9.zip: dacapo-evaluation-git-b00bfa9.jar dacapo-evaluation-git-b00bfa9.zip.aa dacapo-evaluation-git-b00bfa9.zip.ab dacapo-evaluation-git-b00bfa9.zip.ac dacapo-evaluation-git-b00bfa9.zip.ad
 	cat dacapo-evaluation-git-b00bfa9.zip.* > dacapo-evaluation-git-b00bfa9.zip
 
 dacapo-%.jar:
