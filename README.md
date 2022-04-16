@@ -58,6 +58,8 @@ For benchmarks triggered by our `running` command (see detailed instructions in 
 
 Running inside a docker container can bring some overheads as well. Feel free to use a native host to run the experiment, as explained above.
 
+**_Important notes:_ To minimize noise, you should ensure that you're the only user logged in to the machine. There should be no other resource-consuming programs running during benchmarking, except the benchmark programs. We recommend using a tmux session to run the benchmark, and the user, or the "operator" should log out of the machine right after the benchmark starts.**
+
 #### Evaluations not included in this artifact
 
 In our paper we have a few experiments and analysis on openjdk GCs, LXR itself, as well as the benchmark characteristics. These results are not the _key_ claims of the paper, so we do not evaluate and reproduce them in this artifact.
@@ -240,9 +242,16 @@ Say if we have the data folder name as `latency-41e9f1e1e2ea-2022-03-04-Fri-0215
 # ./bench/latency-curve.py latency-41e9f1e1e2ea-2022-03-04-Fri-021548
 ```
 
-This will generate three png files under `/root/` containing the latency curve graphs. File names should be `latency-lusearch.jpg`, `latency-h2.jpg` and `latency-tomcat.jpg`.
+This will generate three jpg files under `/root/` containing the latency curve graphs. File names should be `latency-lusearch.jpg`, `latency-cassandra.jpg`, `latency-h2.jpg`, and `latency-tomcat.jpg`.
 
-Note that cassandra is excluded from the evaluation, due to the docker issues.
+If you use a docker container, you can use the following commands to copy graphs out to your host machine:
+
+```console
+$ sudo docker cp lxr:/root/latency-lusearch.jpg ./
+$ sudo docker cp lxr:/root/latency-cassandra.jpg ./
+$ sudo docker cp lxr:/root/latency-h2.jpg ./
+$ sudo docker cp lxr:/root/latency-tomcat.jpg ./
+```
 
 # Build the docker image
 
