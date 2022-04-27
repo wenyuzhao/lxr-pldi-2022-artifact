@@ -4,6 +4,8 @@ We ship our artifact as a docker image, containing the pre-built OpenJDK builds 
 
 This documentation shows the steps to fetch the image, and reproduce all the key results in the paper.
 
+Please refer to https://github.com/wenyuzhao/mmtk-core/tree/lxr-pldi-2022 for latest implementation, and [this repo](https://github.com/wenyuzhao/lxr-pldi-2022-artifact) for the instructions to reproduce the results in our paper.
+
 ## Table of Contents
 
 * [Prepare](#prepare)
